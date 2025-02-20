@@ -1,5 +1,3 @@
-#### **📄 `README.md`**
-```markdown
 # 🎾 テニスサークル検索アプリ（Next.js + Prisma + MySQL）
 
 ## 📌 プロジェクト概要
