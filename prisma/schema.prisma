@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+   provider = "prisma-client-js"
+}
+
+datasource db {
+   provider = "mysql"
+   url      = env("DATABASE_URL")
+}
+
+// ユーザーモデル
+model User {
+   id           Int           @id @default(autoincrement())
+   name         String
+   email        String        @unique
+   avatar       String?
+   level        String
+   playYears    Int
+   favoriteShot String?
+   bio          String?       @db.Text
+   createdAt    DateTime      @default(now())
+   updatedAt    DateTime      @updatedAt
+   joinRequests JoinRequest[]
+}
+
+// サークルモデル
+model Club {
+   id           Int           @id @default(autoincrement())
+   name         String
+   image        String?
+   description  String        @db.Text
+   location     String
+   court        String
+   schedule     String
+   level        String
+   members      Int           @default(0)
+   maxMembers   Int
+   fee          String
+   requirements String
+   contact      String
+   createdAt    DateTime      @default(now())
+   updatedAt    DateTime      @updatedAt
+   joinRequests JoinRequest[]
+}
+
+// 参加申請モデル
+model JoinRequest {
+   id        Int      @id @default(autoincrement())
+   name      String
+   email     String
+   message   String   @db.Text
+   status    String   @default("pending")
+   createdAt DateTime @default(now())
+   updatedAt DateTime @updatedAt
+   club      Club     @relation(fields: [clubId], references: [id])
+   clubId    Int
+   user      User     @relation(fields: [userId], references: [id])
+   userId    Int
+
+   @@index([clubId])
+   @@index([userId])
+}
